@@ -1,20 +1,65 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+//Path: sdk\index.js
+import React, { Component } from 'react';
+import { View, Text, StyleSheet, TextInput, Image, Pressable } from 'react-native';
+import PassWordStrengthMeter from './sdk/PassWordStrengthMeter';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import LoginPage from './loginPage';
+import Home from './Home';
+import Cart from './Cart';
+import useNavigation from '@react-navigation/native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+
+const Stack = createStackNavigator();
+
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      password: ''
+    };
+  }
+  render() {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator>
+
+          <Stack.Screen
+            name="Put in credintials to login"
+            component={LoginPage}
+          />
+
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={({ navigation }) => ({
+              headerRight: () => CartButton(navigation),
+            })}
+            
+          />
+
+          <Stack.Screen
+            name="cart"
+            component={Cart}
+          />
+
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
+
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const CartButton = (navigation)=>{
+
+  return (
+    <Pressable
+      onPress={() => navigation.navigate('cart')}
+    >
+      <Image
+        source={require('./assets/cartimg.png')}
+        style={{ width: 30, height: 30, marginRight: 10 }}
+      />
+    </Pressable>
+  );
+};
